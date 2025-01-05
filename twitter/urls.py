@@ -6,4 +6,5 @@ app_name = 'twitter'
 urlpatterns = [
     path('', views.index, name='home'),
     path('profiles/', views.profiles , name='profiles'),
+    path('profile/<int:pk>/', views.profile, name='profile'),
 ]

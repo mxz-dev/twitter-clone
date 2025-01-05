@@ -13,7 +13,9 @@
                 <img src="{{profile.avatar.url}}" alt="image for {{profile.user.get_full_name}}" class="rounded-circle me-3" width="100" height="100">
                 <div>
                     <h5 class="card-title mb-0">{{profile.user.get_full_name}}</h5>
-                    <p class="card-text"><a href="#" class="text-decoration-none">@{{profile.user.username}}</a></p>
+                    <p class="card-text">
+                        <a href="{% url 'twitter:profile' profile.pk %}" class="text-decoration-none">@{{profile.user.username}}</a>
+                    </p>
                     <small  class="text-muted">Last updated {{profile.last_change|date:"d/M/Y h:i a"}} </small>
 
                 </div>
