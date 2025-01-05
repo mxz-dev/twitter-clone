@@ -10,11 +10,11 @@
     <div class="col-12 mb-3">
         <div class="card w-50 rounded-3">
             <div class="d-flex align-items-center p-3">
-                <img src="https://via.placeholder.com/100" alt="User 1" class="rounded-circle me-3" width="100" height="100">
+                <img src="{{profile.avatar.url}}" alt="image for {{profile.user.get_full_name}}" class="rounded-circle me-3" width="100" height="100">
                 <div>
                     <h5 class="card-title mb-0">{{profile.user.get_full_name}}</h5>
                     <p class="card-text"><a href="#" class="text-decoration-none">@{{profile.user.username}}</a></p>
-                    <small  class="text-muted">Twittes: </small>
+                    <small  class="text-muted">Last updated {{profile.last_change|date:"d/M/Y h:i a"}} </small>
 
                 </div>
             </div>
