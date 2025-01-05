@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
-from twitter.models import Profile
+from twitter.models import Profile, Tweets
 from .forms import FollowForm
-def index(request):
-    return render(request, 'home.html')
+
+def home(request):
+    tweets = Tweets.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'tweets': tweets})
 
 def profile(request, pk):
     if request.user.is_authenticated:
-        profile = get_object_or_404(Profile, pk=pk)
+        profile = get_object_or_404(Profile, user__pk=pk)
         current_user_profile = request.user.profile
+        tweets = Tweets.objects.filter(user=profile.user).order_by('-created_at')
         if request.method == 'POST':
             form = FollowForm(request.POST)
             if form.is_valid():
@@ -21,7 +24,7 @@ def profile(request, pk):
                     current_user_profile.follows.remove(profile)
                     current_user_profile.save()
                     messages.success(request, f'You have unfollowed {profile.user.username}.')
-        return render(request, 'twitter/profile.html', {'profile': profile})
+        return render(request, 'twitter/profile.html', {'profile': profile, 'tweets': tweets})
     
 def profiles(request):
     if request.user.is_authenticated:
