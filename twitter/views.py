@@ -2,12 +2,23 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from twitter.models import Profile, Tweets
-from .forms import FollowForm
+from .forms import FollowForm, TweetForm
+
 
 def home(request):
-    tweets = Tweets.objects.all().order_by('-created_at')
-    return render(request, 'home.html', {'tweets': tweets})
-
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = TweetForm(request.POST)
+            if form.is_valid():
+                tweet = form.save(commit=False)
+                tweet.user = request.user
+                tweet.save()
+                messages.success(request, 'Tweet posted successfully.')            
+        tweets = Tweets.objects.all().order_by('-created_at')
+        return render(request, 'home.html', {'tweets': tweets})
+    else:
+        tweets = Tweets.objects.all().order_by('-created_at')
+        return render(request, 'home.html', {'tweets': tweets})
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = get_object_or_404(Profile, user__pk=pk)
