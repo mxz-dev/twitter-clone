@@ -3,7 +3,30 @@ from django.urls import reverse
 from django.contrib import messages
 from twitter.models import Profile, Tweets
 from .forms import FollowForm, TweetForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
+def login_user(request):
+    if request.user.is_authenticated == False:
+        if request.method == "POST":
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, 'You have successfully logged in.')
+                return redirect(reverse('twitter:home'))
+            else:
+                messages.error(request, 'Invalid username or password.')
+                return redirect(reverse('twitter:login'))
+        return render(request, 'twitter/login.html')
+    messages.error(request, 'You are already logged in.')
+    return redirect(reverse('twitter:home'))
+@login_required
+def logout_user(request):
+    logout(request)
+    messages.success(request, 'You have successfully logged out.')
+    return redirect(reverse('twitter:home'))
 
 def home(request):
     if request.user.is_authenticated:
@@ -14,11 +37,9 @@ def home(request):
                 tweet.user = request.user
                 tweet.save()
                 messages.success(request, 'Tweet posted successfully.')            
-        tweets = Tweets.objects.all().order_by('-created_at')
-        return render(request, 'home.html', {'tweets': tweets})
-    else:
-        tweets = Tweets.objects.all().order_by('-created_at')
-        return render(request, 'home.html', {'tweets': tweets})
+                return redirect(reverse('twitter:home'))
+    tweets = Tweets.objects.all().order_by('-created_at')
+    return render(request, 'home.html', {'tweets': tweets})
 def profile(request, pk):
     if request.user.is_authenticated:
         profile = get_object_or_404(Profile, user__pk=pk)

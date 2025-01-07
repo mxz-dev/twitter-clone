@@ -24,6 +24,7 @@
                 </div>
             </div>
             <div class="col-md-4">
+                {% if request.user.is_authenticated %}
                 <h2>Add a Tweet</h2>
                 <form method="post" action="{% url 'twitter:home' %}">
                     {% csrf_token %}
@@ -33,6 +34,9 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Tweet</button>
                 </form>
+                {% else %}
+                <h3><a href="{% url 'twitter:login' %}">Login</a> to Unlock Tweeting</h3>
+                {%endif%}
             </div>
         </div>
     </div>

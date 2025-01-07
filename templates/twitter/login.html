@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Login - Twitter
+{% endblock %}
+
+{% block content %}
+    <div class="col-6 offset-3">
+        <h1>Login</h1>
+        <form action="{% url 'twitter:login' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="usernameInput" class="form-label">Username</label>
+              <input type="text" class="form-control form-control-sm" name="username" id="usernameInput" aria-describedby="emailHelp">
+            </div>
+            <div class="mb-3">
+              <label for="passwordInput" class="form-label">Password</label>
+              <input type="password" class="form-control form-control-sm" name="password" id="passwordInput">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>      
+{% endblock %}
