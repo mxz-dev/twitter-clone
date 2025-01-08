@@ -9,23 +9,31 @@
         {% csrf_token %}
         <div class="mb-3">
           <label for="usernameInput" class="form-label">Username</label>
-          <input type="text" class="form-control form-control-sm" name="username" id="usernameInput" value={{user.username}}>
+          <input type="text" class="form-control form-control-sm" name="username" placeholder="username" id="usernameInput" value={{user.username}}>
         </div>
         <div class="mb-3">
             <label for="emailInput" class="form-label">Email</label>
-            <input type="email" class="form-control form-control-sm" name="email" id="emailInput" value={{user.email}}>
+            <input type="email" class="form-control form-control-sm" name="email" placeholder="email" id="emailInput" value={{user.email}}>
         </div>
         <div class="mb-3">
             <label for="firstNameInput" class="form-label">First Name</label>
-            <input type="text" class="form-control form-control-sm" name="first_name" id="firstNameInput" value={{user.first_name}}>
+            <input type="text" class="form-control form-control-sm" name="first_name" placeholder="first name" id="firstNameInput" value={{user.first_name}}>
         </div>
         <div class="mb-3">
             <label for="lastNameInput" class="form-label">Last Name</label>
-            <input type="text" class="form-control form-control-sm" name="last_name" id="lastNameInput" value="{{user.last_name}}">
+            <input type="text" class="form-control form-control-sm" name="last_name" placeholder="last name" id="lastNameInput" value="{{user.last_name}}">
         </div>
         <div class="mb-3">
-          <label for="passwordInput" class="form-label">Password</label>
-          <input type="password" class="form-control form-control-sm" name="password" id="passwordInput">
+          <label for="passwordInput" class="form-label">Old Password</label>
+          <input type="password" class="form-control form-control-sm" name="old_password" placeholder="old password" id="passwordInput">
+        </div>
+        <div class="mb-3">
+          <label for="password1Input" class="form-label">New Password</label>
+          <input type="password" class="form-control form-control-sm" name="password1" placeholder="new password" id="password1Input">
+        </div>
+        <div class="mb-3">
+          <label for="password2Input" class="form-label">Password Confirm</label>
+          <input type="password" class="form-control form-control-sm" name="password2" placeholder="confirm password" id="password2Input">
         </div>
         <div class="mb-3">
           <label for="ImageInput" class="form-label">Avatar</label>

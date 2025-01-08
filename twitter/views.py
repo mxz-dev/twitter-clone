@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from twitter.models import Profile, Tweets
-from .forms import FollowForm, TweetForm, UserUpdateForm, UserAvatarUpdateForm
+from .forms import FollowForm, TweetForm, UserUpdateForm, UserAvatarUpdateForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 
 def login_user(request):
@@ -34,7 +33,7 @@ def logout_user(request):
 def register_user(request):
     if request.user.is_authenticated == False:
         if request.method == 'POST':
-            form = UserCreationForm(request.POST)
+            form = UserRegisterForm(request.POST)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Account created successfully.')

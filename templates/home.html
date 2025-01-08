@@ -19,7 +19,9 @@
                                 <footer class="blockquote-footer">tweet by <a href="{% url 'twitter:profile' tweet.user.pk %}">@{{tweet.user.username|lower}}</a></footer>
                             </blockquote>
                         </div>
+                        
                     </div>
+                    
                     {% endfor %}
                 </div>
             </div>
