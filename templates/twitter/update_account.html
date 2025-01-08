@@ -5,7 +5,7 @@
 {% block content %}
 <div class="col-6 offset-3">
     <h1>Update Account</h1>
-    <form action="{% url 'twitter:update_user' %}" method="POST">
+    <form action="{% url 'twitter:update_user' %}" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div class="mb-3">
           <label for="usernameInput" class="form-label">Username</label>
@@ -26,6 +26,10 @@
         <div class="mb-3">
           <label for="passwordInput" class="form-label">Password</label>
           <input type="password" class="form-control form-control-sm" name="password" id="passwordInput">
+        </div>
+        <div class="mb-3">
+          <label for="ImageInput" class="form-label">Avatar</label>
+          <input type="file" class="form-control form-control-sm" name="avatar" id="ImageInput">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
