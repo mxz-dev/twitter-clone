@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from twitter.models import Profile, Tweets
-from .forms import FollowForm, TweetForm
+from .forms import FollowForm, TweetForm, UserUpdateForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.models import User 
 
 def login_user(request):
     if request.user.is_authenticated == False:
@@ -22,11 +24,42 @@ def login_user(request):
         return render(request, 'twitter/login.html')
     messages.error(request, 'You are already logged in.')
     return redirect(reverse('twitter:home'))
+
 @login_required
 def logout_user(request):
     logout(request)
     messages.success(request, 'You have successfully logged out.')
     return redirect(reverse('twitter:home'))
+
+def register_user(request):
+    if request.user.is_authenticated == False:
+        if request.method == 'POST':
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Account created successfully.')
+                return redirect(reverse('twitter:login'))
+            else:
+                messages.success(request, 'An error occurred during registration. Please try again.')
+        return render(request, 'twitter/register.html')
+    messages.error(request, 'You are already logged in.')
+    return redirect(reverse('twitter:home'))
+
+@login_required
+def update_user(request):
+    current_user = User.objects.get(id=request.user.id)
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=current_user)
+        if form.is_valid():
+            form.save()
+            login(request, current_user)
+            messages.success(request, 'Account updated successfuly.')
+            return redirect(reverse('twitter:update_user'))
+        else:
+            messages.success(request, 'An error occured during Updating Account. Please try again.')
+            print(form.errors)
+            return redirect(reverse('twitter:update_user'))
+    return render(request, 'twitter/update_account.html', {"user":current_user}) 
 
 def home(request):
     if request.user.is_authenticated:
@@ -40,23 +73,24 @@ def home(request):
                 return redirect(reverse('twitter:home'))
     tweets = Tweets.objects.all().order_by('-created_at')
     return render(request, 'home.html', {'tweets': tweets})
+
+@login_required
 def profile(request, pk):
-    if request.user.is_authenticated:
-        profile = get_object_or_404(Profile, user__pk=pk)
-        current_user_profile = request.user.profile
-        tweets = Tweets.objects.filter(user=profile.user).order_by('-created_at')
-        if request.method == 'POST':
-            form = FollowForm(request.POST)
-            if form.is_valid():
-                if form.cleaned_data['follow'] == 'follow':
-                    current_user_profile.follows.add(profile)
-                    current_user_profile.save()
-                    messages.success(request, f'You are now following {profile.user.username}.')
-                else:
-                    current_user_profile.follows.remove(profile)
-                    current_user_profile.save()
-                    messages.success(request, f'You have unfollowed {profile.user.username}.')
-        return render(request, 'twitter/profile.html', {'profile': profile, 'tweets': tweets})
+    profile = get_object_or_404(Profile, user__pk=pk)
+    current_user_profile = request.user.profile
+    tweets = Tweets.objects.filter(user=profile.user).order_by('-created_at')
+    if request.method == 'POST':
+        form = FollowForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['follow'] == 'follow':
+                current_user_profile.follows.add(profile)
+                current_user_profile.save()
+                messages.success(request, f'You are now following {profile.user.username}.')
+            else:
+                current_user_profile.follows.remove(profile)
+                current_user_profile.save()
+                messages.success(request, f'You have unfollowed {profile.user.username}.')
+    return render(request, 'twitter/profile.html', {'profile': profile, 'tweets': tweets})
     
 def profiles(request):
     if request.user.is_authenticated:

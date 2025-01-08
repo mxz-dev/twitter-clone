@@ -14,7 +14,7 @@
                 <div>
                     <h5 class="card-title mb-0">{{profile.user.get_full_name}}</h5>
                     <p class="card-text">
-                        <a href="{% url 'twitter:profile' profile.pk %}" class="text-decoration-none">@{{profile.user.username}}</a>
+                        <a href="{% url 'twitter:profile' profile.user.pk %}" class="text-decoration-none">@{{profile.user.username}}</a>
                     </p>
                     <small  class="text-secondary">Last updated {{profile.last_change|date:"d/M/Y h:i a"}} </small>
 

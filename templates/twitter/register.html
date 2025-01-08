@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Register - Twitter
+{% endblock %}
+
+{% block content %}
+    <div class="col-6 offset-3">
+        <h1>Register</h1>
+        <form action="{% url 'twitter:register' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="usernameInput" class="form-label">Username</label>
+              <input type="text" class="form-control form-control-sm" name="username" id="usernameInput">
+            </div>
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Email</label>
+                <input type="email" class="form-control form-control-sm" name="email" id="emailInput">
+            </div>
+            <div class="mb-3">
+                <label for="firstNameInput" class="form-label">First Name</label>
+                <input type="text" class="form-control form-control-sm" name="first_name" id="firstNameInput">
+            </div>
+            <div class="mb-3">
+                <label for="lastNameInput" class="form-label">Last Name</label>
+                <input type="text" class="form-control form-control-sm" name="last_name" id="lastNameInput">
+            </div>
+            <div class="mb-3">
+              <label for="passwordInput" class="form-label">Password</label>
+              <input type="password" class="form-control form-control-sm" name="password1" id="passwordInput">
+            </div>
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Password Confirm</label>
+                <input type="password" class="form-control form-control-sm" name="password2" id="passwordInput">
+              </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>      
+{% endblock %}

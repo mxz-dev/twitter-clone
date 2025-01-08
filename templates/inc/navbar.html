@@ -21,6 +21,9 @@
           </li>
           {%else%}
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'twitter:register' %}">Register</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'twitter:login' %}">Login</a>
           </li>
           {%endif%}

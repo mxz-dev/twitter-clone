@@ -42,7 +42,7 @@
                 <div class="d-flex align-items-center mb-3">
                     <img src="{{profile.avatar.url}}" alt="Avatar" class="rounded-circle me-3" style="width: 100px; height: 100px;">
                     <div>
-                        <h5 class="card-title mb-0"><a href="{% url 'twitter:profile' profile.pk %}">@{{profile.user.username}}</a></h5>
+                        <h5 class="card-title mb-0"><a href="{% url 'twitter:profile' profile.pk %}">@{{profile.user.username}}</a> <a href="{% url 'twitter:update_user' %}" type="button" class="btn btn-sm btn-primary text-white">Update User</a></h5>
                         <p class="text-muted">{{profile.user.get_full_name}}</p>
                     </div>
                 </div>
