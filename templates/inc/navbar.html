@@ -14,9 +14,6 @@
           </li>
           {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'twitter:profile' request.user.id %}">My Profile</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="{% url 'twitter:logout' %}">Logout</a>
           </li>
           {%else%}
@@ -28,10 +25,17 @@
           </li>
           {%endif%}
         </ul>
-        <form class="d-flex" role="search">
+        <!-- <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+        </form> -->
+        {% if user.is_authenticated %}
+          <ul class="nav navbar-nav navbar-brand">
+            <li class="nav-item">
+              <a class="text-decoration-none" href="{% url 'twitter:profile' user.id %}"><img src="{{user.profile.avatar.url}}" class="rounded-5 img-fuild" style="width:2.5rem;height:2.4rem"/> </a>
+            </li>
+          </ul>
+        {% endif %}
       </div>
     </div>
   </nav>

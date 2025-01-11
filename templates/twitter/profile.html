@@ -55,15 +55,13 @@
                         <p class="text-white">{{profile.user.get_full_name}}</p>
                     </div>
                 </div>
-                {% if profile.bio %} <p><strong>Bio: </strong>{{profile.bio}}</p> {% endif %}
                 <div class="d-flex flex-row gap-3">
-                {% if profile.website %} <p><a href="{{profile.website}}" class="text-decoration-none text-white"><i class="bi bi-box-arrow-up-right"></i></a></p> {% endif %}
-                {% if profile.facebook %} <p><a href="{{profile.facebook}}" class="text-decoration-none text-white"><i class="bi bi-facebook"></i></a></p> {% endif %}
-                {% if profile.instagram %} <p><a href="{{profile.instagram}}" class="text-decoration-none text-white"><i class="bi bi-instagram"></i></a></p> {% endif %}
-                {% if profile.x %} <p><a href="{{profile.x}}" class="text-decoration-none text-white"><i class="bi bi-twitter-x"></i></a></p> {% endif %}
-
-                
-            </div>
+                    {% if profile.website %} <p><a href="{{profile.website}}" class="text-decoration-none text-white"><i class="bi bi-box-arrow-up-right"></i></a></p> {% endif %}
+                    {% if profile.facebook %} <p><a href="{{profile.facebook}}" class="text-decoration-none text-white"><i class="bi bi-facebook"></i></a></p> {% endif %}
+                    {% if profile.instagram %} <p><a href="{{profile.instagram}}" class="text-decoration-none text-white"><i class="bi bi-instagram"></i></a></p> {% endif %}
+                    {% if profile.x %} <p><a href="{{profile.x}}" class="text-decoration-none text-white"><i class="bi bi-twitter-x"></i></a></p> {% endif %}
+                </div>
+                    {% if profile.bio %} <p><strong>Bio: </strong>{{profile.bio}}</p> {% endif %}
             </div>
         </div>
         {% if tweets %}
