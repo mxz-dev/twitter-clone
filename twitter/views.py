@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from twitter.models import Profile, Tweets
-from .forms import FollowForm, TweetForm, UserUpdateForm, UserAvatarUpdateForm, UserRegisterForm
+from .forms import FollowForm, TweetForm, UserUpdateForm, UserProfileUpdateForm, UserRegisterForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User 
@@ -50,20 +50,31 @@ def update_user(request):
     current_user = User.objects.get(id=request.user.id)
     current_user_profile = Profile.objects.get(user__id=request.user.id)
     if request.method == 'POST':
-        user_form = UserUpdateForm(request.POST or None, request.FILES or None, instance=current_user)
-        avatar_form = UserAvatarUpdateForm(request.POST or None, request.FILES or None,  instance=current_user_profile)
-        if user_form.is_valid() and avatar_form.is_valid():
+        user_form = UserUpdateForm(request.POST or None, instance=current_user)
+        if user_form.is_valid():
             user_form.save()
-            avatar_form.save()
             login(request, current_user)
             messages.success(request, 'Account updated successfuly.')
             return redirect(reverse('twitter:update_user'))
         else:
             messages.success(request, 'An error occured during Updating Account. Please try again.')
-            print(user_form.errors)
             return redirect(reverse('twitter:update_user'))
     return render(request, 'twitter/update_account.html', {"user":current_user}) 
 
+@login_required
+def update_profile(request):
+    current_user_profile = Profile.objects.get(user__id=request.user.id)
+    if request.method == "POST":
+        profile_form = UserProfileUpdateForm(request.POST or None, request.FILES or None, instance=current_user_profile)
+        if profile_form.is_valid():
+            profile_form.save()
+            messages.success(request, 'Profile updated successfuly.')
+            return redirect(reverse('twitter:update_profile'))
+        else:
+            messages.success(request, 'An error occured during Updating Profile. Please try again.')
+            return redirect(reverse('twitter:update_profile'))
+    return render(request, 'twitter/update_profile.html', {"profile":current_user_profile}) 
+    
 def home(request):
     current_site = get_current_site(request)
     if request.user.is_authenticated:

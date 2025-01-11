@@ -21,5 +21,12 @@ class Profile(models.Model):
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False, blank=True)
     last_change = models.DateTimeField(auto_now=True)
     avatar = models.ImageField(upload_to='avatars/', null=True, blank=True, default='avatars/default.jpg')
+    bio = models.TextField(null=True, blank=True, max_length=240)
+   
+    website = models.URLField(null=True, blank=True, default="", max_length=100)
+    instagram = models.URLField(null=True, blank=True, default="", max_length=100)
+    facebook = models.URLField(null=True, blank=True, default="", max_length=100)
+    x = models.URLField(null=True, blank=True, default="", max_length=100) 
+  
     def __str__(self):
         return self.user.username

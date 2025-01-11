@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Update Profile - Twitter
+{% endblock title %}
+{% block content %}
+<div class="col-6 offset-3">
+    <h1>Update Profile</h1>
+    <form action="{% url 'twitter:update_profile' %}" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="bioInput" class="form-label">Bio</label>
+            <textarea class="form-control form-control-sm" name="bio" id="bioInput" placeholder="bio" rows="3">{% if profile.bio %}{{profile.bio}}{%endif%}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="websiteInput" class="form-label">Website</label>
+            <input type="text" class="form-control form-control-sm" name="website" id="websiteInput" placeholder="website" value="{% if profile.website %}{{profile.website}}{%endif%}" />
+        </div>
+        <div class="mb-3">
+            <label for="facebookInput" class="form-label">Facebook</label>
+            <input type="text" class="form-control form-control-sm" name="facebook" id="facebookInput" placeholder="facebook"  value="{% if profile.facebook %}{{profile.facebook}}{%endif%}" />
+        </div>
+        <div class="mb-3">
+            <label for="instagramInput" class="form-label">Instagram</label>
+            <input type="text" class="form-control form-control-sm" name="instagram" id="instagramInput" placeholder="instagram"  value="{% if profile.instagram %}{{profile.instagram}}{%endif%}" />
+        </div>
+        <div class="mb-3">
+            <label for="xInput" class="form-label">X</label>
+            <input type="text" class="form-control form-control-sm" name="x" id="xInput" placeholder="x (twitter)"  value="{% if profile.x %}{{profile.x}}{%endif%}" />
+        </div>
+        <div class="mb-3">
+            <label for="ImageInput" class="form-label">Avatar</label>
+            <input type="file" class="form-control form-control-sm" name="avatar" id="ImageInput">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+</div>        
+{% endblock %}

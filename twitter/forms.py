@@ -31,7 +31,7 @@ class UserUpdateForm(forms.ModelForm):
             user.save()
         return user
 
-class UserAvatarUpdateForm(forms.ModelForm):
+class UserProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile 
-        fields = ("avatar",)
+        fields = ("avatar","bio","website","instagram","facebook","x")

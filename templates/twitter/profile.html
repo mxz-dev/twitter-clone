@@ -45,11 +45,25 @@
                 <div class="d-flex align-items-center mb-3">
                     <img src="{{profile.avatar.url}}" alt="Avatar" class="rounded-circle me-3" style="width: 100px; height: 100px;">
                     <div>
-                        <h5 class="card-title mb-0"><a href="{% url 'twitter:profile' profile.pk %}">@{{profile.user.username}}</a> <a href="{% url 'twitter:update_user' %}" type="button" class="btn btn-sm btn-primary text-white">Update Account</a></h5>
-                        <p class="text-muted">{{profile.user.get_full_name}}</p>
+                        <h5 class="card-title mb-0">
+                            <a href="{% url 'twitter:profile' profile.pk %}">@{{profile.user.username}}</a> 
+                            {% if profile.user.id == request.user.id %}
+                                <a href="{% url 'twitter:update_user' %}" type="button" class="btn btn-sm btn-primary text-white">Update Account</a> 
+                                <a href="{% url 'twitter:update_profile' %}" type="button" class="btn btn-sm btn-secondary text-white">Update Profile</a>
+                            {%endif%}
+                        </h5>
+                        <p class="text-white">{{profile.user.get_full_name}}</p>
                     </div>
                 </div>
-                {% if profile.user.email %} <p><strong>Email:</strong> {{profile.user.email}}</p> {% endif %}
+                {% if profile.bio %} <p><strong>Bio: </strong>{{profile.bio}}</p> {% endif %}
+                <div class="d-flex flex-row gap-3">
+                {% if profile.website %} <p><a href="{{profile.website}}" class="text-decoration-none text-white"><i class="bi bi-box-arrow-up-right"></i></a></p> {% endif %}
+                {% if profile.facebook %} <p><a href="{{profile.facebook}}" class="text-decoration-none text-white"><i class="bi bi-facebook"></i></a></p> {% endif %}
+                {% if profile.instagram %} <p><a href="{{profile.instagram}}" class="text-decoration-none text-white"><i class="bi bi-instagram"></i></a></p> {% endif %}
+                {% if profile.x %} <p><a href="{{profile.x}}" class="text-decoration-none text-white"><i class="bi bi-twitter-x"></i></a></p> {% endif %}
+
+                
+            </div>
             </div>
         </div>
         {% if tweets %}

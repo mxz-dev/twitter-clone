@@ -11,6 +11,8 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('register/', views.register_user, name="register"),
     path('update-user/', views.update_user , name="update_user"),
+    path('update-profile/', views.update_profile , name="update_profile"),
+
     path('like-tweet/<int:pk>/', views.like_tweet, name='like_tweet'),
     path('share-tweet/<int:pk>/', views.share_tweet, name='share_tweet'),
 ]
