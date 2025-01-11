@@ -6,7 +6,12 @@ from django.contrib.auth.models import User
 class Tweets(models.Model):
     tweet = models.CharField(max_length=140)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def total_likes(self):
+        return self.likes.count()
+    
     def __str__(self):
         return (f"{self.user.username} ({self.created_at}): {self.tweet}")
     class Meta:

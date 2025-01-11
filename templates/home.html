@@ -1,9 +1,56 @@
 {% extends 'base.html' %}
+{% block head %}
+<style>
+    .copy-success {
+        display: none;
+        color: #28a745; /* Green color */
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock %}
 {% block title %}
     Home - Twitter
 {% endblock title %}
 {% block content %}
     <div class="container mt-4">
+        <!-- modal for share tweets ! -->
+        <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="shareModalLabel">Share This Link</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div id="copySuccessMessage" class="copy-success">Link copied to clipboard!</div>
+                            <div class="mb-3">
+                                <label for="shareLink" class="form-label">Copy the link below:</label>
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-sm"
+                                        id="shareLink"
+                                        readonly
+                                    />
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-success btn-sm"
+                                        id="copyBtn"
+                                    >
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-8">
                 <h1>Tweets</h1>
@@ -11,13 +58,19 @@
                     {% for tweet in tweets %}
                     <div class="card w-75 mb-4 bg-dark text-white">
                         <div class="card-header">
-                            Tweet <i class="bi bi-twitter"></i>
+                            <img src="{{tweet.user.profile.avatar.url}}" class="img-fuild rounded-3" style="width:2.4rem;height:2.2rem;" > <a href="{% url 'twitter:profile' tweet.user.pk %}">@{{tweet.user.username|lower}}</a> <i class="bi bi-twitter"></i>
                         </div>
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
                                 <p>{{tweet.tweet}}</p>
-                                <footer class="blockquote-footer">tweet by <a href="{% url 'twitter:profile' tweet.user.pk %}">@{{tweet.user.username|lower}}</a></footer>
+                                <footer class="blockquote-footer" style="font-size:.8rem">tweeted at {{tweet.created_at|date:"y/m/d H:ia"}}</footer>
                             </blockquote>
+                            <hr/>
+                            <div class="d-flex flex-row justify-content-start gap-3">
+                                <a href="{% url 'twitter:like_tweet' pk=tweet.id %}" class="text-decoration-none text-white"><i class="bi bi-heart{% if request.user in tweet.likes.all %}-fill{%endif%}"></i> {{tweet.total_likes}}</a>
+                                <a href="#" onclick=showModal("{{site.domain}}","{% url 'twitter:share_tweet' tweet.id %}") class="text-decoration-none text-white"><i class="bi bi-share"></i></a>
+                            
+                            </div>
                         </div>
                         
                     </div>
@@ -42,4 +95,29 @@
             </div>
         </div>
     </div>
+    <script>
+      const showModal = (site,url) => {
+        document.getElementById('shareLink').value = `http://${site}${url}`;
+        const modal = new bootstrap.Modal(document.getElementById('shareModal'));
+        modal.show();
+      }
+       // JavaScript to handle copying to clipboard
+       document.getElementById('copyBtn').addEventListener('click', () => {
+        const shareLink = document.getElementById('shareLink');
+        const copySuccessMessage = document.getElementById('copySuccessMessage');
+        
+        // Copy the link to clipboard
+        shareLink.select();
+        shareLink.setSelectionRange(0, 99999); // For mobile devices
+        navigator.clipboard.writeText(shareLink.value).then(() => {
+            // Show success message
+            copySuccessMessage.style.display = 'block';
+            
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                copySuccessMessage.style.display = 'none';
+            }, 3000);
+        });
+    });
+    </script>
 {% endblock content %}

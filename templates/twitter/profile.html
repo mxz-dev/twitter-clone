@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block title %}
+{{profile.user.username}} - Twitter
+{% endblock %}
 {% block content %}
 <div class="row">
     <!-- Left Sidebar -->
@@ -47,18 +50,30 @@
                     </div>
                 </div>
                 {% if profile.user.email %} <p><strong>Email:</strong> {{profile.user.email}}</p> {% endif %}
-                <p><strong>Tweets:</strong></p>
-                <ul>
-                    {% if tweets %}
-                    {% for tweet in tweets %}
-                        <li>{{tweet.tweet}} ({{tweet.created_at|date:"d/m/Y H:i a"}})</li>
-                    {%endfor%}
-                    {% else %}
-                        <li>No tweets yet</li>
-                    {%endif%}
-                </ul>
             </div>
         </div>
+        {% if tweets %}
+        <h2>Tweets:</h2>
+        <div class="d-flex flex-column ">
+                    {% for tweet in tweets %}
+                    <div class="card w-75 mb-4 bg-dark text-white">
+                        <div class="card-header">
+                            <img src="{{profile.avatar.url}}" class="img-fuild rounded-3" style="width:2.4rem;height:2.2rem;" > <a href="{% url 'twitter:profile' tweet.user.pk %}">@{{tweet.user.username|lower}}</a> <i class="bi bi-twitter"></i>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{tweet.tweet}}</p>
+                                <footer class="blockquote-footer" style="font-size:.8rem">tweeted at {{tweet.created_at|date:"y/m/d H:ia"}}</footer>
+                            </blockquote>
+                            <a href="{% url 'twitter:like_tweet' pk=tweet.id %}" class="text-decoration-none text-white"><i class="bi bi-heart{% if request.user in tweet.likes.all %}-fill{%endif%}"></i> {{tweet.total_likes}}</a>
+                        
+                        </div>
+                    </div>
+                    {% endfor %}
+        </div>
+        {% else %}
+        <h2>No Tweets Yet</h2>
+        {%endif%}
     </div>
 </div>
 {% endblock %}

@@ -6,6 +6,7 @@ from .forms import FollowForm, TweetForm, UserUpdateForm, UserAvatarUpdateForm, 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User 
+from django.contrib.sites.shortcuts import get_current_site
 
 def login_user(request):
     if request.user.is_authenticated == False:
@@ -64,6 +65,7 @@ def update_user(request):
     return render(request, 'twitter/update_account.html', {"user":current_user}) 
 
 def home(request):
+    current_site = get_current_site(request)
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = TweetForm(request.POST)
@@ -74,7 +76,20 @@ def home(request):
                 messages.success(request, 'Tweet posted successfully.')            
                 return redirect(reverse('twitter:home'))
     tweets = Tweets.objects.all().order_by('-created_at')
-    return render(request, 'home.html', {'tweets': tweets})
+    return render(request, 'home.html', {'tweets': tweets, 'site':current_site})
+
+@login_required
+def like_tweet(request, pk):
+    tweet = get_object_or_404(Tweets, pk=pk)
+    user = request.user.id
+    if tweet.likes.filter(id=user):
+        tweet.likes.remove(request.user)
+        tweet.save()
+    else:
+        tweet.likes.add(request.user)
+    tweet.save()
+    # using HTTP_REFERER header to redirect to the same page
+    return redirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def profile(request, pk):
@@ -100,4 +115,11 @@ def profiles(request):
         return render(request, 'twitter/profiles.html', {'profiles': profiles})
     
     messages.error(request, 'You need to be logged in to view profiles.')
+    return redirect(reverse('twitter:home'))
+
+def share_tweet(request, pk):
+    tweet = get_object_or_404(Tweets, pk=pk)
+    if tweet:
+        return render(request, 'twitter/share_tweet.html', {'tweet': tweet})
+    messages.error(request, 'Tweet not found.')
     return redirect(reverse('twitter:home'))

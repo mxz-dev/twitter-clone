@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}
+    Tweet - Twitter
+{% endblock title %}
+{% block content %}
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <h1>Tweets</h1>
+                <div class="d-flex flex-column align-items-center">
+                    <div class="card w-75 mb-4 bg-dark text-white">
+                        <div class="card-header">
+                            <img src="{{tweet.user.profile.avatar.url}}" class="img-fuild rounded-3" style="width:2.4rem;height:2.2rem;" > <a href="{% url 'twitter:profile' tweet.user.pk %}">@{{tweet.user.username|lower}}</a> <i class="bi bi-twitter"></i>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{tweet.tweet}}</p>
+                                <footer class="blockquote-footer" style="font-size:.8rem">tweeted at {{tweet.created_at|date:"y/m/d H:ia"}}</footer>
+                            </blockquote>
+                            <hr/>
+                            <a href="{% url 'twitter:like_tweet' pk=tweet.id %}" class="text-decoration-none text-white"><i class="bi bi-heart{% if request.user in tweet.likes.all %}-fill{%endif%}"></i> {{tweet.total_likes}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
