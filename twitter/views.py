@@ -24,9 +24,10 @@ def home(request):
 
 @login_required
 def profile(request, pk):
+    current_site = get_current_site(request)
     profile = get_object_or_404(Profile, user__pk=pk)
     tweets = Tweets.objects.filter(user=profile.user).order_by('-created_at')
-    return render(request, 'twitter/profile.html', {'profile': profile, 'tweets': tweets})
+    return render(request, 'twitter/profile.html', {'profile': profile, 'tweets': tweets, 'site':current_site})
 
 @login_required
 def profiles(request):
@@ -118,9 +119,19 @@ def share_tweet(request, pk):
         return render(request, 'twitter/share_tweet.html', {'tweet': tweet})
     messages.error(request, 'Tweet not found.')
     return redirect(reverse('twitter:home'))
-
 @login_required
-def follow_unfollow(request, pk):
+def delete_tweet(request,pk):
+    tweet = get_object_or_404(Tweets, pk=pk)
+    if tweet:
+        if request.user.id == tweet.user.id:
+            tweet.delete()
+            messages.success(request, 'Tweet successfuly deleted.')
+            return redirect(request.META.get('HTTP_REFERER'))
+        else:
+            messages.error(request, 'You not own this tweet.')
+            return redirect(reverse('twitter:home'))
+@login_required
+def follow_unfollow(request, pk): # this view is used to follow and unfollow users
     profile = get_object_or_404(Profile, user__pk=pk)
     current_user_profile = request.user.profile
     # if user already follows the profile, unfollow it

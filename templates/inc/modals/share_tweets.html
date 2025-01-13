@@ -1,0 +1,36 @@
+<div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shareModalLabel">Share This Link</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div id="copySuccessMessage" class="copy-success">Link copied to clipboard!</div>
+                    <div class="mb-3">
+                        <label for="shareLink" class="form-label">Copy the link below:</label>
+                        <div class="input-group">
+                            <input
+                                type="text"
+                                class="form-control form-control-sm"
+                                id="shareLink"
+                                readonly
+                            />
+                            <button
+                                type="button"
+                                class="btn btn-outline-success btn-sm"
+                                id="copyBtn"
+                            >
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

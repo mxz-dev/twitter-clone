@@ -34,5 +34,30 @@
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
+    <script>
+      const showModal = (site,url) => {
+        document.getElementById('shareLink').value = `http://${site}${url}`;
+        const modal = new bootstrap.Modal(document.getElementById('shareModal'));
+        modal.show();
+      }
+       // JavaScript to handle copying to clipboard
+       document.getElementById('copyBtn').addEventListener('click', () => {
+        const shareLink = document.getElementById('shareLink');
+        const copySuccessMessage = document.getElementById('copySuccessMessage');
+        
+        // Copy the link to clipboard
+        shareLink.select();
+        shareLink.setSelectionRange(0, 99999); // For mobile devices
+        navigator.clipboard.writeText(shareLink.value).then(() => {
+            // Show success message
+            copySuccessMessage.style.display = 'block';
+            
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                copySuccessMessage.style.display = 'none';
+            }, 3000);
+        });
+    });
+    </script>
 </body>
 </html>

@@ -15,4 +15,5 @@ urlpatterns = [
     path('like-tweet/<int:pk>/', views.like_tweet, name='like_tweet'),
     path('share-tweet/<int:pk>/', views.share_tweet, name='share_tweet'),
     path('follow-unfollow/<int:pk>/', views.follow_unfollow, name='follow_unfollow'), # this url follow or unfollow a user
+    path('delete-tweet/<int:pk>/', views.delete_tweet, name='delete_tweet')
 ]
