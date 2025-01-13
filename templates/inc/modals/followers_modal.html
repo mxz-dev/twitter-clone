@@ -1,0 +1,43 @@
+<div class="modal fade" id="followersModal" tabindex="-1" aria-labelledby="followersModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Search Bar -->
+                <input 
+                    type="text" 
+                    class="form-control search-bar" 
+                    id="searchFollowers" 
+                    placeholder="Search followers..." 
+                />
+                <!-- Followers List -->
+                <div id="followersList">
+                    {% for followers in profile.followed_by.all %}
+                    <div class="follower-item" data-name="{{followers.user.username}}">
+                        <div class="follower-info">
+                            <img src="{{followers.avatar.url}}" alt="avatar {{followers.user.username}}">
+                            <a href="{% url 'twitter:profile' followers.user.pk %}">{{followers.user.username}}</a>
+                        </div>
+                        {% if request.user.profile == profile %}
+                            {% if followers in profile.follows.all %}
+                                <a class="btn btn-outline-danger follow-btn" href="{% url 'twitter:follow_unfollow' pk=followers.user.pk %}">Remove</a>
+                            {%else%}
+                                <a class="btn btn-outline-primary follow-btn" href="{% url 'twitter:follow_unfollow' pk=followers.user.pk %}">Follow Back</a>
+                            {%endif%}
+                        {%else%}
+                                {% if followers in request.user.profile.follows.all %}
+                                    <a class="btn btn-outline-danger follow-btn" href="{% url 'twitter:follow_unfollow' pk=followers.user.pk %}">Remove</a>
+                                {%else%}
+                                    <a class="btn btn-outline-primary follow-btn" href="{% url 'twitter:follow_unfollow' pk=followers.user.pk %}">Follow</a>
+                                {%endif%}
+                        {%endif%}
+                    </div>
+                    {%endfor%}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
