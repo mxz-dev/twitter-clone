@@ -36,6 +36,8 @@
                                 <a href="#" onclick=showModal("{{site.domain}}","{% url 'twitter:share_tweet' tweet.id %}") class="text-decoration-none text-white"><i class="bi bi-share"></i></a>
                                 {% if request.user.id == tweet.user.id %}
                                 <a href="{% url 'twitter:delete_tweet' pk=tweet.id %}" class="text-decoration-none text-white" ><i class="bi bi-trash3"></i></a>
+                                <a href="{% url 'twitter:edit_tweet' pk=tweet.id %}" class="text-decoration-none text-white" ><i class="bi bi-pencil"></i></a>
+
                                 {%endif%}
                             </div>
                         </div>

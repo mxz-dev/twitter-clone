@@ -34,6 +34,21 @@ def profiles(request):
     profiles = Profile.objects.exclude(user=request.user.id)
     return render(request, 'twitter/profiles.html', {'profiles': profiles})
 
+@login_required
+def follow_unfollow(request, pk): # this view is used to follow and unfollow users
+    profile = get_object_or_404(Profile, user__pk=pk)
+    current_user_profile = request.user.profile
+    # if user already follows the profile, unfollow it
+    if current_user_profile.follows.filter(user__pk=pk):
+        current_user_profile.follows.remove(profile)
+        current_user_profile.save()
+        messages.success(request, f'You have unfollowed {profile.user.username}.')
+    else:
+        current_user_profile.follows.add(profile)
+        current_user_profile.save()
+        messages.success(request, f'You are now following {profile.user.username}.')
+    return redirect(request.META.get('HTTP_REFERER'))
+
 def login_user(request):
     if request.user.is_authenticated == False:
         if request.method == "POST":
@@ -115,12 +130,14 @@ def like_tweet(request, pk):
 
 def share_tweet(request, pk):
     tweet = get_object_or_404(Tweets, pk=pk)
+    current_site = get_current_site(request)
+
     if tweet:
-        return render(request, 'twitter/share_tweet.html', {'tweet': tweet})
+        return render(request, 'twitter/share_tweet.html', {'tweet': tweet, 'site':current_site})
     messages.error(request, 'Tweet not found.')
     return redirect(reverse('twitter:home'))
 @login_required
-def delete_tweet(request,pk):
+def delete_tweet(request, pk):
     tweet = get_object_or_404(Tweets, pk=pk)
     if tweet:
         if request.user.id == tweet.user.id:
@@ -131,16 +148,20 @@ def delete_tweet(request,pk):
             messages.error(request, 'You not own this tweet.')
             return redirect(reverse('twitter:home'))
 @login_required
-def follow_unfollow(request, pk): # this view is used to follow and unfollow users
-    profile = get_object_or_404(Profile, user__pk=pk)
-    current_user_profile = request.user.profile
-    # if user already follows the profile, unfollow it
-    if current_user_profile.follows.filter(user__pk=pk):
-        current_user_profile.follows.remove(profile)
-        current_user_profile.save()
-        messages.success(request, f'You have unfollowed {profile.user.username}.')
-    else:
-        current_user_profile.follows.add(profile)
-        current_user_profile.save()
-        messages.success(request, f'You are now following {profile.user.username}.')
-    return redirect(request.META.get('HTTP_REFERER'))
+def edit_tweet(request, pk):
+    tweet = get_object_or_404(Tweets, pk=pk)
+    form = TweetForm()
+    if request.user.pk == tweet.user.pk:
+        if request.method == "POST":
+            form = TweetForm(request.POST or None, instance=tweet)
+            if form.is_valid():
+                new_tweet = form.save(commit=False)
+                new_tweet.user = request.user
+                new_tweet.save()
+                messages.success(request, "You'r Tweet has Updated!")
+                return redirect(reverse("twitter:home"))
+            else:
+                messages.error(request, "Error is occure during edit Tweet ...")
+                return redirect(request.META.get('HTTP_REFERER'))
+                
+    return render(request, 'twitter/edit_tweet.html', {"tweet":tweet, "form":form})
