@@ -61,6 +61,12 @@
                 {% else %}
                 <h3><a href="{% url 'twitter:login' %}">Login</a> to Unlock Tweeting</h3>
                 {%endif%}
+                <hr/>
+                <form class="mt-3" action="{% url 'twitter:home' %}" method="GET" role="search">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search Tweets..." aria-label="Search">
+                    <br/>
+                    <button class="btn btn-success" type="submit">Search</button>
+                </form>
             </div>
         </div>
     </div>

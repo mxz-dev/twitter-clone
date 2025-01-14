@@ -17,4 +17,5 @@ urlpatterns = [
     path('share-tweet/<int:pk>/', views.share_tweet, name='share_tweet'),
     path('delete-tweet/<int:pk>/', views.delete_tweet, name='delete_tweet'),
     path('edit-tweet/<int:pk>/', views.edit_tweet, name="edit_tweet"),
+    path('search-tweet/', views.home, name='search_tweet'),
 ]

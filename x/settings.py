@@ -121,3 +121,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # SITE Settings 
 SITE_ID = 1
+
+# LOGIN Setting
+LOGIN_URL = '/login/'

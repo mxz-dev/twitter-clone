@@ -7,9 +7,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User 
 from django.contrib.sites.shortcuts import get_current_site
-
+from django.db.models import Q
 def home(request):
     current_site = get_current_site(request)
+  
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = TweetForm(request.POST)
@@ -19,7 +20,11 @@ def home(request):
                 tweet.save()
                 messages.success(request, 'Tweet posted successfully.')            
                 return redirect(reverse('twitter:home'))
+            
+
     tweets = Tweets.objects.all().order_by('-created_at')
+    if search := request.GET.get('search'):
+        tweets = Tweets.objects.filter(tweet__contains = search).order_by('-created_at')
     return render(request, 'home.html', {'tweets': tweets, 'site':current_site})
 
 @login_required
@@ -32,6 +37,8 @@ def profile(request, pk):
 @login_required
 def profiles(request):
     profiles = Profile.objects.exclude(user=request.user.id)
+    if search := request.GET.get('search'):
+        profiles = Profile.objects.filter(Q(user__username__contains=search) | Q(user__first_name__contains=search) |Q(user__last_name__contains=search) | Q(user__email__contains=search))
     return render(request, 'twitter/profiles.html', {'profiles': profiles})
 
 @login_required

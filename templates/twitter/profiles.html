@@ -5,9 +5,14 @@
 {% endblock title %}
 {% block content %}
 <div class="row">
+    <form class="d-flex  mb-4" action="{% url 'twitter:profiles' %}" method="GET" role="search">
+        <input class="form-control me-2" type="search" name="search" placeholder="Search Users..." aria-label="Search">
+        <button class="btn btn-success" type="submit">Search</button>
+    </form>
     {% for profile in profiles %}
     <!-- User 1 -->
     <div class="col-12 mb-3">
+        
         <div class="card w-50 rounded-3 bg-dark text-white">
             <div class="d-flex align-items-center p-3">
                 <img src="{{profile.avatar.url}}" alt="image for {{profile.user.get_full_name}}" class="rounded-circle me-3" width="100" height="100">
