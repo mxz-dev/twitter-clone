@@ -8,9 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User 
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
+
+# Home Page 
 def home(request):
     current_site = get_current_site(request)
-  
     if request.user.is_authenticated:
         if request.method == 'POST':
             form = TweetForm(request.POST)
@@ -20,10 +21,11 @@ def home(request):
                 tweet.save()
                 messages.success(request, 'Tweet posted successfully.')            
                 return redirect(reverse('twitter:home'))
-            
 
     tweets = Tweets.objects.all().order_by('-created_at')
+    # search option for searching on tweets ...
     if search := request.GET.get('search'):
+        # change result to search result ...
         tweets = Tweets.objects.filter(tweet__contains = search).order_by('-created_at')
     return render(request, 'home.html', {'tweets': tweets, 'site':current_site})
 
@@ -143,6 +145,7 @@ def share_tweet(request, pk):
         return render(request, 'twitter/share_tweet.html', {'tweet': tweet, 'site':current_site})
     messages.error(request, 'Tweet not found.')
     return redirect(reverse('twitter:home'))
+
 @login_required
 def delete_tweet(request, pk):
     tweet = get_object_or_404(Tweets, pk=pk)
