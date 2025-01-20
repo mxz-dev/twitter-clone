@@ -19,26 +19,16 @@ Before getting started, make sure you have the following installed on your syste
 
 Follow these steps to run the project on your local machine:
 
-### 1. Clone the Repository
+### 1. Clone the Repository From Github and Run's with docker compose (Recommended)
 ```bash
 git clone https://github.com/mxz-dev/twitter-clone.git
 cd twitter-clone
-```
-### 2. Run & install With Docker Compose (Recommended)
-```bash
-cd twitter-clone
-docker-compose exec web python manage.py migrate
 docker-compose up --build
 ```
-### 3. Run & install Manualy
+### 2. Run & install Manualy (Optional)
 ```bash
 cd twitter-clone
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver 0.0.0.0:8000
-```
-### 4. Pull & install From Docker Hub
-```bash
-docker pull mxzdev/twitter-clone:v1
-docker run -p 8000:8000 twitter-clone:v1
 ```
