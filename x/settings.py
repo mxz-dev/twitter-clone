@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG',cast=bool, default=False)
+DEBUG = config('DEBUG',cast=bool, default=True)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -39,7 +39,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'x.urls'
@@ -119,12 +118,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'staticfiles/'
+STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "staticfiles",
-]
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
@@ -140,7 +135,7 @@ SITE_ID = config("SITE_ID",cast=int,default=1)
 # LOGIN Setting
 LOGIN_URL = config("LOGIN_URL", default='/login/')
 
-if config("USE_SSL_SETTING", cast=bool, default=True):
+if config("USE_SSL_SETTING", cast=bool, default=False):
     
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
@@ -158,4 +153,3 @@ if config("USE_SSL_SETTING", cast=bool, default=True):
     SECURE_REFERRER_POLICY = "strict-origin"
     USE_X_FORWARDED_HOST = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWAREDED_PROTO", "https") 
-    CSP_DEFAULT_SRC = ("'self'",)
