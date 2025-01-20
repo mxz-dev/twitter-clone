@@ -27,7 +27,6 @@ cd twitter-clone
 ### 2. Run & install With Docker Compose (Recommended)
 ```bash
 cd twitter-clone
-docker-compose exec web python manage.py migrate
 docker-compose up --build
 ```
 ### 3. Run & install Manualy
